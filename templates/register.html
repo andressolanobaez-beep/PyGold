@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <div class="eyebrow">ÚNETE A LA COMUNIDAD</div>
+  <h1>Crea tu cuenta</h1>
+  <p>Tu correo se usa para iniciar sesión. No lo mostramos en tu perfil.</p>
+  <form method="post" class="auth-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="form-field">Nombre de usuario<input type="text" name="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_-]+" autocomplete="username" required><small>3–24 letras, números, guiones o guiones bajos.</small></label>
+    <label class="form-field">Correo electrónico<input type="email" name="email" maxlength="254" autocomplete="email" required></label>
+    <label class="form-field">Contraseña<input type="password" name="password" minlength="12" maxlength="128" autocomplete="new-password" required><small>Usa al menos 12 caracteres.</small></label>
+    <button class="button button-primary">Crear cuenta</button>
+  </form>
+  <p class="auth-switch">¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión</a></p>
+</section>
+{% endblock %}

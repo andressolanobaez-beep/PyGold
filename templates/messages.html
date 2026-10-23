@@ -1,8 +1,41 @@
 {% extends "base.html" %}
 {% block title %}Mensajes{% endblock %}
 {% block content %}
-<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Mensajes</div><button class="button button-outline button-small" id="new-chat-button">＋ Nuevo grupo</button></header>
+<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Mensajes</div></header>
 <section class="page-intro"><div class="eyebrow">HABLA CON TU GENTE</div><h1>Tus <span class="gold">mensajes.</span></h1><p>Conecta con amigos y organiza tus aventuras.</p></section>
-<section class="messages-layout"><div class="conversation-list"><div class="conversation-search"><span>⌕</span><input type="search" placeholder="Buscar conversación"></div><div class="conversation-empty"><div>◌</div><strong>Aún no hay conversaciones</strong><p>Los chats con tus amigos aparecerán aquí.</p><button class="button button-outline button-small" id="start-chat-button">Iniciar conversación</button></div></div><div class="chat-empty"><div class="empty-icon">✉</div><h2>Un mensaje puede iniciar una aventura</h2><p>Agrega amigos para empezar a conversar.</p><button class="button button-primary button-small" id="create-group-button">Crear grupo</button></div></section>
-<dialog id="chat-dialog"><form method="dialog" class="dialog-content"><button class="dialog-close" aria-label="Cerrar">×</button><div class="eyebrow">NUEVO GRUPO</div><h2>Junta a tu equipo</h2><p>Los grupos podrán incluir tantos amigos como quieras. Añadir participantes y enviar mensajes estará disponible al implementar cuentas y almacenamiento.</p><label class="form-field">Nombre del grupo<input id="group-name" maxlength="50" placeholder="Nombre del grupo"></label><button class="button button-primary button-small" id="save-group" value="default">Crear grupo</button></form></dialog>
+<section class="messages-layout messages-live">
+  <aside class="conversation-list">
+    <div class="conversation-search"><span>◌</span><input type="search" placeholder="Conversaciones" disabled></div>
+    {% if conversations %}
+      <div class="conversation-items">
+        {% for conversation in conversations %}
+          {% set others = conversation.members|rejectattr("user_id", "equalto", current_user.id)|map(attribute="user")|select("defined")|map(attribute="username")|list %}
+          {% set title = conversation.name or (others|join(", ") or "Chat personal") %}
+          <a class="conversation-item {% if active_conversation and active_conversation.id == conversation.id %}selected{% endif %}" href="{{ url_for('messages', conversation=conversation.id) }}"><strong>{{ title }}</strong><small>{{ conversation.updated_at.strftime("%b %d, %H:%M") }}</small></a>
+        {% endfor %}
+      </div>
+    {% else %}<div class="conversation-empty"><div>◌</div><strong>Aún no hay conversaciones</strong><p>Inicia un chat con tus amigos.</p></div>{% endif %}
+    {% if friends %}
+      <form method="post" class="new-conversation-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="eyebrow">NUEVO CHAT</div>
+        <label class="form-field">Nombre de grupo <span class="muted">(opcional)</span><input name="group_name" maxlength="50" placeholder="Nombre del grupo"></label>
+        <div class="friend-picker">{% for friend in friends %}<label><input type="checkbox" name="participant_ids" value="{{ friend.id }}"> {{ friend.username }}</label>{% endfor %}</div>
+        <button class="button button-outline button-small">Crear chat</button>
+      </form>
+    {% else %}<a class="button button-outline button-small friend-cta" href="{{ url_for('profile') }}">Agrega amigos para chatear</a>{% endif %}
+  </aside>
+  {% if active_conversation %}
+    <div class="chat-panel">
+      {% set other_names = active_conversation.members|rejectattr("user_id", "equalto", current_user.id)|map(attribute="user")|select("defined")|map(attribute="username")|list %}
+      <header class="chat-header"><strong>{{ active_conversation.name or (other_names|join(", ") or "Chat personal") }}</strong><span>Mensajes guardados</span></header>
+      <div class="chat-messages" id="chat-messages" data-poll-url="{{ url_for('new_messages', conversation_id=active_conversation.id) }}" data-last-id="{{ conversation_messages[-1].id if conversation_messages else 0 }}">
+        {% for message in conversation_messages %}<article class="chat-message {% if message.sender_id == current_user.id %}own-message{% endif %}" data-message-id="{{ message.id }}"><strong>{{ message.sender.username }}</strong><p>{{ message.body }}</p><time>{{ message.created_at.strftime("%H:%M") }}</time></article>{% endfor %}
+      </div>
+      <form class="send-message-form" method="post" action="{{ url_for('send_message', conversation_id=active_conversation.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><textarea name="body" maxlength="2000" rows="2" placeholder="Escribe un mensaje..." required></textarea><button class="button button-primary">Enviar</button></form>
+    </div>
+  {% else %}
+    <div class="chat-empty"><div class="empty-icon">✉</div><h2>Un mensaje puede iniciar una aventura</h2><p>Selecciona una conversación o inicia un chat con tus amigos.</p></div>
+  {% endif %}
+</section>
 {% endblock %}

@@ -4,6 +4,7 @@
 <header class="topbar"><div class="breadcrumbs"><a href="{{ url_for('create') }}">Crear</a> <span>/</span> Publicar un videojuego</div></header>
 <section class="page-intro narrow-intro"><div class="eyebrow">PUBLICA EN PYGOLD</div><h1>Comparte tu <span class="gold">mundo.</span></h1><p>Sube el paquete ZIP para mostrar tu juego a la comunidad.</p></section>
 <form class="upload-form" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
   <label class="form-field">Nombre del juego<input type="text" name="name" maxlength="60" placeholder="Mi increíble aventura" required></label>
   <label class="form-field">Descripción <span class="muted">(opcional)</span><textarea name="description" maxlength="500" rows="3" placeholder="¿Qué encontrarán los jugadores en tu mundo?"></textarea></label>
   <label class="drop-zone" for="game-zip"><span class="upload-icon">↑</span><strong id="file-name">Arrastra tu ZIP aquí o selecciónalo</strong><span>Solo archivos .zip · máximo 20 MB</span><input id="game-zip" type="file" name="game_zip" accept=".zip,application/zip" required></label>

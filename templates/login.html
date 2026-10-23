@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <div class="eyebrow">QUÉ BUENO VERTE DE NUEVO</div>
+  <h1>Inicia sesión</h1>
+  <p>Entra a tu cuenta para conectar con tus amigos.</p>
+  <form method="post" class="auth-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="form-field">Correo electrónico<input type="email" name="email" maxlength="254" autocomplete="email" required></label>
+    <label class="form-field">Contraseña<input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="button button-primary">Iniciar sesión</button>
+  </form>
+  <p class="auth-switch">¿Aún no tienes cuenta? <a href="{{ url_for('register') }}">Regístrate</a></p>
+</section>
+{% endblock %}

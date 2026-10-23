@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='social.css') }}">
 </head>
 <body>
   <aside class="sidebar">
@@ -25,12 +26,31 @@
       <a class="nav-item {% if request.endpoint == 'settings' %}active{% endif %}" href="{{ url_for('settings') }}"><span class="nav-icon">⚙</span>Configuración</a>
     </nav>
     <div class="sidebar-bottom">
-      <div class="avatar avatar-small">P</div>
-      <div class="sidebar-user"><strong>Jugador</strong><span>Cuenta local</span></div>
-      <a class="settings-shortcut" href="{{ url_for('settings') }}" aria-label="Configuración">···</a>
+      <div class="avatar avatar-small">{{ current_user.username[:1]|upper if current_user.is_authenticated else "P" }}</div>
+      <div class="sidebar-user">
+        {% if current_user.is_authenticated %}
+          <strong>{{ current_user.username }}</strong><span>Cuenta PyGold</span>
+        {% else %}
+          <strong>Invitado</strong><span>Sin sesión</span>
+        {% endif %}
+      </div>
+      {% if current_user.is_authenticated %}
+        <form action="{{ url_for('logout') }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="settings-shortcut" aria-label="Cerrar sesión" title="Cerrar sesión">↪</button>
+        </form>
+      {% else %}
+        <a class="settings-shortcut" href="{{ url_for('login') }}" aria-label="Iniciar sesión">↪</a>
+      {% endif %}
     </div>
   </aside>
   <main class="main-content">
+    {% if not current_user.is_authenticated %}
+      <div class="auth-actions">
+        <a href="{{ url_for('login') }}">Iniciar sesión</a>
+        <a class="button button-primary button-small" href="{{ url_for('register') }}">Crear cuenta</a>
+      </div>
+    {% endif %}
     {% with notices = get_flashed_messages(with_categories=true) %}
       {% if notices %}
         <div class="flash-list">{% for category, message in notices %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>

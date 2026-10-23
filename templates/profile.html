@@ -4,8 +4,27 @@
 <header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Perfil</div></header>
 <section class="profile-cover"><div class="cover-orb orb-one"></div><div class="cover-orb orb-two"></div><div class="profile-avatar" id="profile-avatar">P</div></section>
 <section class="profile-main">
-  <div class="profile-heading"><div><div class="eyebrow">TU ESPACIO</div><h1 id="profile-name-display">Jugador</h1><p id="profile-bio-display">Añade una bio para contarle al mundo quién eres.</p></div><button class="button button-outline button-small" id="edit-profile-button">Editar perfil</button></div>
-  <form class="profile-editor hidden" id="profile-form"><label class="form-field">Apodo<input name="nickname" maxlength="30" placeholder="Tu apodo"></label><label class="form-field">Bio<textarea name="bio" maxlength="180" rows="3" placeholder="Cuéntanos sobre ti"></textarea></label><button class="button button-primary button-small" type="submit">Guardar perfil</button></form>
-  <section class="friends-section"><div class="section-heading"><div><div class="eyebrow">TU CÍRCULO</div><h2>Amigos</h2></div><span class="muted">Todavía no tienes amigos</span></div><div class="empty-friends"><span>◉</span><p>Cuando agregues amigos, aparecerán aquí.</p><a href="{{ url_for('messages') }}">Ir a mensajes <span>→</span></a></div></section>
+  <div class="profile-heading"><div><div class="eyebrow">TU ESPACIO</div><h1>{{ current_user.username }}</h1><p>{{ current_user.bio or "Añade una bio para contarle al mundo quién eres." }}</p></div></div>
+  <form class="profile-editor" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="form-field">Apodo<input name="nickname" maxlength="24" value="{{ current_user.username }}" required></label>
+    <label class="form-field">Bio<textarea name="bio" maxlength="180" rows="3" placeholder="Cuéntanos sobre ti">{{ current_user.bio }}</textarea></label>
+    <button class="button button-primary button-small" type="submit">Guardar perfil</button>
+  </form>
+  <section class="friends-section">
+    <div class="section-heading"><div><div class="eyebrow">TU CÍRCULO</div><h2>Amigos</h2></div><span class="muted">{{ friends|length }} amigo{% if friends|length != 1 %}s{% endif %}</span></div>
+    <form method="get" class="friend-search"><label class="form-field">Buscar jugadores<input name="q" value="{{ search_term }}" maxlength="24" placeholder="Escribe un nombre de usuario"></label><button class="button button-outline button-small">Buscar</button></form>
+    {% if search_results %}
+      <div class="friend-list">{% for user in search_results %}<div class="friend-row"><strong>{{ user.username }}</strong><form method="post" action="{{ url_for('send_friend_request') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="username" value="{{ user.username }}"><button class="button button-outline button-small">＋ Agregar</button></form></div>{% endfor %}</div>
+    {% elif search_term %}<p class="muted">No encontramos jugadores con ese nombre.</p>{% endif %}
+    {% if incoming_requests %}
+      <h3 class="subheading">Solicitudes recibidas</h3>
+      <div class="friend-list">{% for friend_request in incoming_requests %}<div class="friend-row"><strong>{{ friend_request.sender.username }}</strong><form method="post" action="{{ url_for('accept_friend_request', request_id=friend_request.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-primary button-small">Aceptar</button></form></div>{% endfor %}</div>
+    {% endif %}
+    {% if friends %}
+      <h3 class="subheading">Tus amigos</h3>
+      <div class="friend-list">{% for friend in friends %}<div class="friend-row"><div class="avatar avatar-small">{{ friend.username[:1]|upper }}</div><strong>{{ friend.username }}</strong></div>{% endfor %}</div>
+    {% else %}<div class="empty-friends"><span>◉</span><p>Busca jugadores arriba para enviar solicitudes de amistad.</p><a href="{{ url_for('messages') }}">Ir a mensajes <span>→</span></a></div>{% endif %}
+  </section>
 </section>
 {% endblock %}

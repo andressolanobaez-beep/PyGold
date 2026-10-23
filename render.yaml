@@ -10,6 +10,10 @@ services:
         value: 3.12.3
       - key: SECRET_KEY
         generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
       - key: PYGOLD_DATA_DIR
         value: /var/data
     disk:

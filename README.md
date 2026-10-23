@@ -1,15 +1,15 @@
 # PyGold
 
-PyGold is a Python web-app prototype for a community game platform. It includes
-community game listings, Spanish-language profile/settings/messages pages, a
-canvas-based drawing editor, and validation for game ZIP uploads.
+PyGold is a Python web app for a community game platform. It includes accounts,
+persistent friend relationships and text conversations, community game listings,
+a canvas-based drawing editor, and validation for game ZIP uploads.
 
 ## Run locally
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python app.py
 ```
 
@@ -19,17 +19,30 @@ The ZIP upload accepts files up to 20 MB. Each archive must contain non-empty
 `Texturas/` and `Main/` directories plus `Main/main.py`, `Main/icono.png`, and
 `Main/BASE.pow`. The icon must be PNG and `BASE.pow` must have a RAR signature.
 Archives are checked for unsafe paths, symbolic links, file count, and
-uncompressed size. Uploaded game code is **not executed**.
+uncompressed size. Uploaded game code is **not executed**. A restricted
+`open()` wrapper is not a security boundary; untrusted Python needs a separate,
+disposable sandbox service with OS-level isolation, resource limits, and no
+network access. Do not enable game execution in the web process.
 
-Profile edits and preference toggles are browser-local demo data. User accounts,
-friend relationships, persistent messaging, image sharing, garment publishing,
-game execution, and local game hosting are not implemented. Never store user
-passwords, uploads, or other private data in Git or commit credentials. Running
-creator-provided Python requires a separately designed, isolated execution
-service; it must not run inside the web application process.
+Profiles, account passwords, friend requests, friendships, group membership,
+and text messages are stored in the configured database. Passwords are hashed;
+the raw password is never stored. Sign-up currently does not include email
+verification or password recovery. Messages are plain text; attachments and
+audio/video calls are not implemented. Profile preference toggles still use
+browser-local storage. Never store user passwords, uploads, or other private
+data in Git or commit credentials.
 
-The Render blueprint provisions a persistent disk for the SQLite game catalog
-and uploaded ZIPs. Set a strong `SECRET_KEY` in the deployment environment.
+For local development the app uses SQLite under `data/`. In production,
+configure a Render PostgreSQL database and set the web service's `DATABASE_URL`
+to its **internal connection string**. Set a strong `SECRET_KEY` and
+`SESSION_COOKIE_SECURE=true`. The persistent disk in the Render blueprint
+stores uploaded game archives; it does not replace PostgreSQL for user data.
+When creating a Render PostgreSQL database, add the database's internal
+connection string as `DATABASE_URL` in the web service's environment. The app
+accepts Render's `postgres://` URL and uses the psycopg driver.
+The blueprint requests `DATABASE_URL` during setup. If the existing Render
+service was created manually, add it under **Environment** yourself. Production
+startup refuses to use a predictable development secret.
 
 For a manually configured Render web service, set **Start Command** to
 `gunicorn --bind 0.0.0.0:$PORT app:app`. Do not use the placeholder

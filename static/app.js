@@ -14,6 +14,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const theme = localStorage.getItem("pygold:dark-theme");
   if (theme === "false") document.body.classList.add("light-theme");
 
+  const chatMessages = document.getElementById("chat-messages");
+  if (chatMessages) {
+    let lastMessageId = Number(chatMessages.dataset.lastId || 0);
+    const pollMessages = async () => {
+      try {
+        const response = await fetch(
+          `${chatMessages.dataset.pollUrl}?after=${lastMessageId}`,
+          { headers: { Accept: "application/json" } },
+        );
+        if (!response.ok) return;
+        const messages = await response.json();
+        messages.forEach((message) => {
+          const article = document.createElement("article");
+          article.className = message.sender === document.querySelector(".sidebar-user strong")?.textContent
+            ? "chat-message own-message"
+            : "chat-message";
+          article.dataset.messageId = String(message.id);
+          const author = document.createElement("strong");
+          author.textContent = message.sender;
+          const body = document.createElement("p");
+          body.textContent = message.body;
+          const time = document.createElement("time");
+          time.textContent = new Date(message.created_at).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          article.append(author, body, time);
+          chatMessages.append(article);
+          lastMessageId = Math.max(lastMessageId, message.id);
+        });
+        if (messages.length) chatMessages.scrollTop = chatMessages.scrollHeight;
+      } catch (error) {
+        console.error("No se pudieron actualizar los mensajes.", error);
+      }
+    };
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    window.setInterval(pollMessages, 5000);
+  }
+
   const fileInput = document.getElementById("game-zip");
   const fileName = document.getElementById("file-name");
   if (fileInput && fileName) {
