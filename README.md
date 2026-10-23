@@ -15,6 +15,14 @@ python app.py
 
 Open `http://localhost:5000`.
 
+## Publish changes to GitHub
+
+On Windows, run `publicar.bat` from Explorer or the terminal. It stages changes,
+blocks common database and secret-file types, displays the staged files, asks
+for confirmation, creates a commit, and pushes it to the current
+branch on `origin`. Review the file list before confirming; the check cannot
+detect secrets accidentally pasted into ordinary source files.
+
 The ZIP upload accepts files up to 20 MB. Each archive must contain non-empty
 `Texturas/` and `Main/` directories plus `Main/main.py`, `Main/icono.png`, and
 `Main/BASE.pow`. The icon must be PNG and `BASE.pow` must have a RAR signature.
