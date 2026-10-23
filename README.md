@@ -30,3 +30,10 @@ service; it must not run inside the web application process.
 
 The Render blueprint provisions a persistent disk for the SQLite game catalog
 and uploaded ZIPs. Set a strong `SECRET_KEY` in the deployment environment.
+
+For a manually configured Render web service, set **Start Command** to
+`gunicorn --bind 0.0.0.0:$PORT app:app`. Do not use the placeholder
+`your_application.wsgi`; this repository's Flask application is `app:app`.
+The blueprint pins Python to 3.12.3. If the service is configured manually,
+select Python 3.12 in its environment settings or sync the service from
+`render.yaml` so it does not unexpectedly use a different runtime.
