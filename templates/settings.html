@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Configuración{% endblock %}
+{% block content %}
+<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Configuración</div></header>
+<section class="page-intro"><div class="eyebrow">TU CUENTA, A TU MANERA</div><h1>Configuración</h1><p>Personaliza tu experiencia y decide qué compartes.</p></section>
+<div class="settings-layout"><nav class="settings-tabs"><a class="active" href="#privacidad">Privacidad</a><a href="#experiencia">Experiencia</a><a href="#cuenta">Cuenta</a></nav><div class="settings-content">
+  <section class="settings-section" id="privacidad"><div class="eyebrow">VISIBILIDAD</div><h2>Privacidad y presencia</h2>
+    <label class="setting-row"><span><strong>Perfil público</strong><small>Permite que cualquier persona vea tu perfil.</small></span><input class="toggle" type="checkbox" data-setting="public-profile" checked></label>
+    <label class="setting-row"><span><strong>Mostrar estado en línea</strong><small>Deja que tus amigos vean cuándo estás conectado.</small></span><input class="toggle" type="checkbox" data-setting="show-online" checked></label>
+    <label class="setting-row"><span><strong>Permitir solicitudes de amistad</strong><small>Otros jugadores pueden enviarte invitaciones.</small></span><input class="toggle" type="checkbox" data-setting="friend-requests" checked></label>
+    <label class="setting-row"><span><strong>Notificaciones de mensajes</strong><small>Recibe avisos cuando te escriban.</small></span><input class="toggle" type="checkbox" data-setting="message-notifications" checked></label>
+  </section>
+  <section class="settings-section" id="experiencia"><div class="eyebrow">PREFERENCIAS</div><h2>Tu experiencia</h2><label class="setting-row"><span><strong>Tema oscuro</strong><small>Usa el tema oscuro en PyGold.</small></span><input class="toggle" type="checkbox" data-setting="dark-theme" checked></label><label class="setting-row"><span><strong>Reducir animaciones</strong><small>Limita los efectos de movimiento de la interfaz.</small></span><input class="toggle" type="checkbox" data-setting="reduce-motion"></label></section>
+  <section class="settings-section danger-zone" id="cuenta"><div class="eyebrow">ZONA DE PELIGRO</div><h2>Eliminar cuenta</h2><p>Esta demo no tiene cuentas de usuario ni datos de cuenta reales que borrar. La eliminación de cuenta debe implementarse cuando se añadan autenticación y almacenamiento de usuarios.</p><button class="button button-danger" type="button" disabled>Eliminar mi cuenta</button></section>
+</div></div>
+{% endblock %}

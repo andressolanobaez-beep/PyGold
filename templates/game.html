@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ game.name }}{% endblock %}
+{% block content %}
+<header class="topbar"><div class="breadcrumbs"><a href="{{ url_for('home') }}">Descubrir</a> <span>/</span> {{ game.name }}</div><span class="cover-tag">COMUNIDAD</span></header>
+<section class="game-detail-hero"><div class="detail-art"><div class="art-sun"></div><div class="art-island"><div class="island-grass"></div><div class="island-layer layer-one"></div><div class="island-layer layer-two"></div><div class="island-layer layer-three"></div><div class="art-tree tree-one"></div><div class="art-player"></div></div></div><div class="detail-copy"><div class="eyebrow">MUNDO DE LA COMUNIDAD</div><h1>{{ game.name }}</h1><p>{{ game.description or 'Un mundo creado en PyGold.' }}</p><button class="button button-primary" disabled title="La ejecución de paquetes subidos aún no está disponible">Jugar <span>→</span></button><p class="muted small-copy">El paquete se publicó correctamente. La ejecución de juegos aún no está disponible.</p></div></section>
+{% endblock %}

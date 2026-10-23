@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Mensajes{% endblock %}
+{% block content %}
+<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Mensajes</div><button class="button button-outline button-small" id="new-chat-button">＋ Nuevo grupo</button></header>
+<section class="page-intro"><div class="eyebrow">HABLA CON TU GENTE</div><h1>Tus <span class="gold">mensajes.</span></h1><p>Conecta con amigos y organiza tus aventuras.</p></section>
+<section class="messages-layout"><div class="conversation-list"><div class="conversation-search"><span>⌕</span><input type="search" placeholder="Buscar conversación"></div><div class="conversation-empty"><div>◌</div><strong>Aún no hay conversaciones</strong><p>Los chats con tus amigos aparecerán aquí.</p><button class="button button-outline button-small" id="start-chat-button">Iniciar conversación</button></div></div><div class="chat-empty"><div class="empty-icon">✉</div><h2>Un mensaje puede iniciar una aventura</h2><p>Agrega amigos para empezar a conversar.</p><button class="button button-primary button-small" id="create-group-button">Crear grupo</button></div></section>
+<dialog id="chat-dialog"><form method="dialog" class="dialog-content"><button class="dialog-close" aria-label="Cerrar">×</button><div class="eyebrow">NUEVO GRUPO</div><h2>Junta a tu equipo</h2><p>Los grupos podrán incluir tantos amigos como quieras. Añadir participantes y enviar mensajes estará disponible al implementar cuentas y almacenamiento.</p><label class="form-field">Nombre del grupo<input id="group-name" maxlength="50" placeholder="Nombre del grupo"></label><button class="button button-primary button-small" id="save-group" value="default">Crear grupo</button></form></dialog>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Crear{% endblock %}
+{% block content %}
+<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Crear</div></header>
+<section class="page-intro"><div class="eyebrow">TALLER CREATIVO</div><h1>¿Qué quieres <span class="gold">crear?</span></h1><p>Elige una herramienta y convierte tu idea en algo que todos puedan disfrutar.</p></section>
+<section class="creation-grid">
+  <a class="creation-card clothing-card" href="#editor"><div class="creation-icon">✎</div><div class="eyebrow">DISEÑO 2D</div><h2>Ropa y accesorios</h2><p>Dibuja camisas, pantalones y caras con el editor creativo.</p><span class="card-link">Abrir editor <span>→</span></span><div class="clothing-preview"><span>✦</span></div></a>
+  <a class="creation-card world-card" href="{{ url_for('upload_game') }}"><div class="creation-icon">▧</div><div class="eyebrow">MUNDOS 3D</div><h2>Un videojuego</h2><p>Comparte tu mundo con la comunidad subiendo el paquete de tu juego.</p><span class="card-link">Publicar un juego <span>→</span></span><div class="world-preview"><span>◆</span><span>▪</span><span>✦</span></div></a>
+</section>
+<section id="editor" class="editor-panel">
+  <div class="section-heading"><div><div class="eyebrow">ESTUDIO DE DISEÑO</div><h2>Tu lienzo</h2></div><span class="muted">Los diseños se descargan como PNG</span></div>
+  <div class="editor-toolbar">
+    <label class="tool-label">Prenda<select id="garment"><option>Camisa</option><option>Pantalón</option><option>Rostro</option></select></label>
+    <div class="tool-group" aria-label="Herramientas de dibujo"><button class="tool-button selected" data-tool="brush" title="Pincel">✎</button><button class="tool-button" data-tool="eraser" title="Borrador">◩</button><button class="tool-button" data-tool="line" title="Línea">╱</button><button class="tool-button" data-tool="rectangle" title="Rectángulo">□</button><button class="tool-button" data-tool="circle" title="Círculo">○</button></div>
+    <label class="tool-label">Color<input id="paint-color" type="color" value="#d9a441"></label>
+    <label class="tool-label">Tamaño<input id="brush-size" type="range" min="1" max="36" value="8"></label>
+    <button class="button button-outline button-small" id="undo-button">Deshacer</button>
+    <button class="button button-outline button-small" id="clear-button">Limpiar</button>
+    <button class="button button-primary button-small" id="download-button">Descargar PNG</button>
+  </div>
+  <div class="canvas-wrap"><canvas id="design-canvas" width="640" height="420" aria-label="Lienzo de dibujo"></canvas></div>
+  <p class="canvas-hint">Elige una herramienta y dibuja con el ratón o el dedo.</p>
+</section>
+{% endblock %}

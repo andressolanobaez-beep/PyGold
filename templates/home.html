@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Descubre juegos{% endblock %}
+{% block content %}
+<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Descubrir</div><a class="button button-small button-outline" href="{{ url_for('create') }}">＋ Crear</a></header>
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="live-dot"></span> EL UNIVERSO LO CREAS TÚ</div>
+    <h1>Juega. Crea.<br><span class="gold">Imagina más.</span></h1>
+    <p>Explora mundos de la comunidad y construye el siguiente gran juego.</p>
+    <a class="button button-primary" href="{{ url_for('create') }}">Empieza a crear <span>→</span></a>
+  </div>
+  <div class="hero-art" aria-label="Isla flotante de un mundo de juego">
+    <div class="art-sun"></div><div class="art-cloud cloud-one"></div><div class="art-cloud cloud-two"></div>
+    <div class="art-island"><div class="island-grass"></div><div class="island-layer layer-one"></div><div class="island-layer layer-two"></div><div class="island-layer layer-three"></div><div class="art-tree tree-one"></div><div class="art-tree tree-two"></div><div class="art-player"></div></div>
+    <span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✧</span>
+    <div class="art-caption"><span class="live-dot"></span> UN MUNDO NUEVO TE ESPERA</div>
+  </div>
+</section>
+<section class="section-block">
+  <div class="section-heading"><div><div class="eyebrow">HECHOS POR LA COMUNIDAD</div><h2>Juegos para explorar</h2></div><span class="muted">{{ games|length }} publicado{% if games|length != 1 %}s{% endif %}</span></div>
+  {% if games %}
+    <div class="game-grid">
+      {% for game in games %}
+        <a class="game-card" href="{{ url_for('game_detail', game_id=game.id) }}">
+          <div class="game-cover cover-community"><span class="cover-gem">✦</span><span class="cover-tag">COMUNIDAD</span></div>
+          <div class="game-info"><div><h3>{{ game.name }}</h3><p>{{ game.description or 'Un mundo creado en PyGold.' }}</p></div><span class="play-arrow">↗</span></div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state"><div class="empty-icon">✧</div><h3>Tu próxima aventura empieza aquí</h3><p>Aún no hay juegos publicados. ¡Sé el primero en compartir uno con la comunidad!</p><a class="button button-outline" href="{{ url_for('upload_game') }}">Publicar un juego <span>→</span></a></div>
+  {% endif %}
+</section>
+<section class="creator-banner"><div><div class="eyebrow">TU IDEA, TU MUNDO</div><h2>¿Y si lo crearas tú?</h2><p>Diseña ropa, inventa mundos y compártelos con todos.</p></div><a class="button button-primary" href="{{ url_for('create') }}">Explorar herramientas <span>→</span></a></section>
+<footer class="page-footer">PYGOLD <span>HECHO PARA IMAGINAR</span></footer>
+{% endblock %}

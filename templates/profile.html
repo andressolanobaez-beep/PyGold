@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<header class="topbar"><div class="breadcrumbs">PyGold <span>/</span> Perfil</div></header>
+<section class="profile-cover"><div class="cover-orb orb-one"></div><div class="cover-orb orb-two"></div><div class="profile-avatar" id="profile-avatar">P</div></section>
+<section class="profile-main">
+  <div class="profile-heading"><div><div class="eyebrow">TU ESPACIO</div><h1 id="profile-name-display">Jugador</h1><p id="profile-bio-display">Añade una bio para contarle al mundo quién eres.</p></div><button class="button button-outline button-small" id="edit-profile-button">Editar perfil</button></div>
+  <form class="profile-editor hidden" id="profile-form"><label class="form-field">Apodo<input name="nickname" maxlength="30" placeholder="Tu apodo"></label><label class="form-field">Bio<textarea name="bio" maxlength="180" rows="3" placeholder="Cuéntanos sobre ti"></textarea></label><button class="button button-primary button-small" type="submit">Guardar perfil</button></form>
+  <section class="friends-section"><div class="section-heading"><div><div class="eyebrow">TU CÍRCULO</div><h2>Amigos</h2></div><span class="muted">Todavía no tienes amigos</span></div><div class="empty-friends"><span>◉</span><p>Cuando agregues amigos, aparecerán aquí.</p><a href="{{ url_for('messages') }}">Ir a mensajes <span>→</span></a></div></section>
+</section>
+{% endblock %}
